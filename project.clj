@@ -19,7 +19,7 @@
                                              {:source-paths ["test/cljx"]
                                               :output-path "target/generated-clj-test"
                                               :rules :clj}
-                                             {:source-paths ["src/cljs"]
+                                             {:source-paths ["src/cljx"]
                                               :output-path "target/generated-cljs"
                                               :rules :cljs}
                                              {:source-paths ["test/cljx"]
