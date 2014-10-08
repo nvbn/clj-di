@@ -1,9 +1,10 @@
 (ns clj-di.core-test
   (:require #+clj [clojure.test :refer [deftest is use-fixtures]]
             #+cljs [cemerick.cljs.test :refer-macros [deftest is use-fixtures]]
-            [clj-di.core :as di #+cljs :include-macros #+cljs true]))
+            [clj-di.core :as di #+cljs :include-macros #+cljs true]
+            [clj-di.test :as dt #+cljs :include-macros #+cljs true]))
 
-(use-fixtures :each (fn [f] (di/with-fresh-dependencies (f))))
+(use-fixtures :each (fn [f] (dt/with-fresh-dependencies (f))))
 
 (defprotocol HttpProto
   (GET [this url])

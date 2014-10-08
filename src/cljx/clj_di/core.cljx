@@ -2,13 +2,6 @@
 
 (def dependencies (atom {}))
 
-(defmacro with-fresh-dependencies
-  [& body]
-  `(let [old# @clj-di.core/dependencies]
-     (reset! clj-di.core/dependencies {})
-     ~@body
-     (reset! clj-di.core/dependencies old#)))
-
 (defn register!
   "Register dependecy."
   {:doc/format :markdown}
