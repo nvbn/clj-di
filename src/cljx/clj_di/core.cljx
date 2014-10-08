@@ -1,28 +1,29 @@
 (ns clj-di.core)
 
-(def dependencies (atom []))
+(def dependencies (atom {}))
 
-#+clj (defmacro with-fresh-dependencies
-        [& body]
-        `(let [old# @clj-di.core/dependencies]
-           (reset! clj-di.core/dependencies [])
-           ~@body
-           (reset! clj-di.core/dependencies old#)))
+(defmacro with-fresh-dependencies
+  [& body]
+  `(let [old# @clj-di.core/dependencies]
+     (reset! clj-di.core/dependencies {})
+     ~@body
+     (reset! clj-di.core/dependencies old#)))
 
 (defn register!
   "Register dependecy."
-  [dep]
-  (when-not (some #{dep} @dependencies)
-    (swap! dependencies conj dep)))
+  {:doc/format :markdown}
+  [key dep]
+  (swap! dependencies assoc key dep))
 
-(defn forget!
-  "Forget about dependency."
-  [dep]
-  (swap! dependencies #(remove #{dep} %)))
-
-(defn dependency
+(defn get-dep
   "Get dependency by protocol."
-  [proto]
-  (->> (reverse @dependencies)
-       (filter #(satisfies? proto %))
-       first))
+  [key]
+  (key @dependencies))
+
+(defmacro let-deps
+  "Something like let but for deps."
+  [deps & body]
+  (let [names (vec (take-nth 2 deps))
+        keys (vec (take-nth 2 (rest deps)))]
+    `(let [~names (map clj-di.core/get-dep ~keys)]
+       ~@body)))
