@@ -28,6 +28,7 @@
                                                               :optimizations :whitespace
                                                               :pretty-print true}}]
                                          :test-commands {"test" ["phantomjs" :runner
-                                                                 "target/cljs-test.js"]}}}}
+                                                                 "target/cljs-test.js"]}}
+                             :jvm-opts ["-Xss16m"]}}
             :test-paths ["target/generated-clj-test"]
             :source-paths ["target/generated-clj" "target/generated-cljs" "src/cljs"])
