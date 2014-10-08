@@ -1,6 +1,6 @@
 # clj-di
 
-Dependency injection library for clojure and clojurescript
+Dependency injection for clojure and clojurescript
 
 ## Installation
 

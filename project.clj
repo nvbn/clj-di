@@ -1,5 +1,5 @@
 (defproject clj-di "0.1.0"
-            :description "Dependency injection library for clojure and clojurescript"
+            :description "Dependency injection for clojure and clojurescript"
             :url "https://github.com/nvbn/clj-di"
             :license {:name "Eclipse Public License"
                       :url "http://www.eclipse.org/legal/epl-v10.html"}
