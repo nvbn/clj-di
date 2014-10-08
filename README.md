@@ -1,4 +1,4 @@
-# clj-di
+# clj-di [![Build Status](https://travis-ci.org/nvbn/clj-di.svg)](https://travis-ci.org/nvbn/clj-di)
 
 Dependency injection for clojure and clojurescript
 
