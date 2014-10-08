@@ -10,19 +10,19 @@ Add the following to your `project.clj`:
 
 ## Usage
 
-`clj-di.test/register` &ndash;  register dependency:
+`clj-di.core/register` &ndash;  register dependency:
 
 ```clojure
 (register! :dependency-name dependency)
 ```
 
-`clj-di.test/get-dep` &ndash; get dependency:
+`clj-di.core/get-dep` &ndash; get dependency:
 
 ```clojure
 (get-dep :dependency-name)
 ```
 
-`clj-di.test/let-deps` &ndash; macro for getting dependencies in let-like form:
+`clj-di.core/let-deps` &ndash; macro for getting dependencies in let-like form:
 
 ```clojure
 (let-deps [http :http
