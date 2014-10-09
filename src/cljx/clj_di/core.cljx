@@ -1,6 +1,7 @@
-(ns clj-di.core)
+(ns clj-di.core
+  "Functions and macros for using dependency injection.")
 
-(def dependencies (atom {}))
+(def ^:no-doc dependencies (atom {}))
 
 (defn register!
   "Register dependecy, usage:
@@ -9,8 +10,9 @@
   (register :logger logger
             :http http-client)
   ```
-  "
-  {:doc/format :markdown}
+
+  After that you can get dependency with [[get-dep]] or [[let-deps]]
+  using dependency name (here - `:logger` and `:http`)."
   [& key-dep-pairs]
   (apply swap! dependencies assoc key-dep-pairs))
 
@@ -19,7 +21,9 @@
 
   ```clojure
   (get-dep :http)
-  ```"
+  ```
+
+  Dependency should be registered with [[register!]]."
   [key]
   (key @dependencies))
 
@@ -38,8 +42,9 @@
   (let [http (get-dep :http)
         logger (get-dep :logger)]
     ...)
-  ```
-  "
+
+  Dependencies should be registered with [[register!]].
+  ```"
   [deps & body]
   (let [names (vec (take-nth 2 deps))
         keys (vec (take-nth 2 (rest deps)))]

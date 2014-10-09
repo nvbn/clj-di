@@ -2,6 +2,8 @@
 
 Dependency injection for clojure and clojurescript
 
+[Documentation](http://nvbn.github.io/clj-di/).
+
 ## Installation
 
 Add the following to your `project.clj`:
@@ -13,7 +15,8 @@ Add the following to your `project.clj`:
 `clj-di.core/register` &ndash;  register dependency:
 
 ```clojure
-(register! :dependency-name dependency)
+(register! :dependency-name dependency
+           :other-dependency-name other-dependency)
 ```
 
 `clj-di.core/get-dep` &ndash; get dependency:

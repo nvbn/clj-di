@@ -1,5 +1,5 @@
 (defproject clj-di "0.1.2"
-            :description "Dependency injection for clojure and clojurescript"
+            :description "Dependency injection for clojure and clojurescript."
             :url "https://github.com/nvbn/clj-di"
             :license {:name "Eclipse Public License"
                       :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -30,5 +30,6 @@
                                          :test-commands {"test" ["phantomjs" :runner
                                                                  "target/cljs-test.js"]}}
                              :jvm-opts ["-Xss16m"]}}
+            :codox {:defaults {:doc/format :markdown}}
             :test-paths ["target/generated-clj-test"]
             :source-paths ["target/generated-clj" "target/generated-cljs" "src/cljs"])

@@ -13,3 +13,4 @@ pom.xml.asc
 hs_err*
 .idea
 *iml
+doc/
