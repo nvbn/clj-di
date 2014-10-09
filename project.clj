@@ -1,15 +1,15 @@
-(defproject clj-di "0.1.1"
+(defproject clj-di "0.1.2"
             :description "Dependency injection for clojure and clojurescript"
             :url "https://github.com/nvbn/clj-di"
             :license {:name "Eclipse Public License"
                       :url "http://www.eclipse.org/legal/epl-v10.html"}
             :dependencies [[org.clojure/clojure "1.6.0"]
                            [org.clojure/clojurescript "0.0-2356"]]
-            :profiles {:uberjar {:hooks [cljx.hooks
-                                         leiningen.cljsbuild]}
+            :profiles {:uberjar {:hooks [cljx.hooks]}
                        :dev {:plugins [[lein-cljsbuild "1.0.3"]
                                        [com.keminglabs/cljx "0.4.0"]
-                                       [com.cemerick/clojurescript.test "0.3.1"]]
+                                       [com.cemerick/clojurescript.test "0.3.1"]
+                                       [codox "0.8.10"]]
                              :cljx {:builds [{:source-paths ["src/cljx"]
                                               :output-path "target/generated-clj"
                                               :rules :clj}
