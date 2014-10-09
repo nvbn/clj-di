@@ -74,9 +74,9 @@
   (let [http (get-dep :http)
         logger (get-dep :logger)]
     ...)
+  ```
 
-  Dependencies should be registered with [[register!]].
-  ```"
+  Dependencies should be registered with [[register!]]."
   [deps & body]
   (let [names (vec (take-nth 2 deps))
         keys (vec (take-nth 2 (rest deps)))]
