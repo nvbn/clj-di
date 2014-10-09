@@ -8,7 +8,7 @@ Dependency injection for clojure and clojurescript
 
 Add the following to your `project.clj`:
 
-[![Clojars Project](http://clojars.org/clj-di/latest-version.svg)](http://clojars.org/clj-di)
+[![Clojars Project](https://clojars.org/clj-di/latest-version.svg)](http://clojars.org/clj-di)
 
 ## Usage
 
