@@ -1,4 +1,4 @@
-# clj-di [![Build Status](https://travis-ci.org/nvbn/clj-di.svg?)](https://travis-ci.org/nvbn/clj-di)
+# clj-di [![Build Status](https://travis-ci.org/nvbn/clj-di.svg)](https://travis-ci.org/nvbn/clj-di)
 
 Dependency injection for clojure and clojurescript.
 
@@ -8,7 +8,9 @@ Dependency injection for clojure and clojurescript.
 
 Add the following to your `project.clj`:
 
-[![Clojars Project](https://clojars.org/clj-di/latest-version.svg?)](https://clojars.org/clj-di)
+```clojure
+[clj-di "0.1.3"]
+```
 
 ## Usage
 
