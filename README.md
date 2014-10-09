@@ -22,7 +22,7 @@ Example with clojure:
 
 (defn log-write
   [msg]
-  (swap! (get-dep :log) conj)) ; get dependency with `get-dep`
+  (swap! (get-dep :log) conj msg)) ; get dependency with `get-dep`
     
 (defn run
   []
@@ -46,7 +46,7 @@ Example with clojurescript:
 
 (defn log-write
   [msg]
-  (swap! (get-dep :log) conj)) ; get dependency with `get-dep`
+  (swap! (get-dep :log) conj msg)) ; get dependency with `get-dep`
     
 (defn run
   []
