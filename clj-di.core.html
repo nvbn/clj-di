@@ -3,7 +3,7 @@
 <pre><code class="clojure">(forget! :logger :http)
 </code></pre></div></div></div><div class="public anchor" id="var-get-dep"><h3>get-dep</h3><div class="usage"><code>(get-dep key)</code></div><div class="doc"><div class="markdown"><p>Get dependency by name.</p><p>Usage:</p>
 <pre><code class="clojure">(get-dep :http)
-</code></pre><p>Dependency should be registered with <a href="clj-di.core.html#var-register.21">register!</a>.</p></div></div></div><div class="public anchor" id="var-let-deps"><h3>let-deps</h3><h4 class="type">macro</h4><div class="usage"><code>(let-deps deps &amp; body)</code></div><div class="doc"><div class="markdown"><p>Bind dependencies in lexical scope of code block.</p><p>Usage:</p>
+</code></pre><p>Dependency should be registered with <a href="clj-di.core.html#var-register.21">register!</a> or <a href="clj-di.core.html#var-with-registered">with-registered</a>.</p></div></div></div><div class="public anchor" id="var-let-deps"><h3>let-deps</h3><h4 class="type">macro</h4><div class="usage"><code>(let-deps deps &amp; body)</code></div><div class="doc"><div class="markdown"><p>Bind dependencies in lexical scope of code block.</p><p>Usage:</p>
 <pre><code class="clojure">(let-deps [http :http
            logger :logger]
   ...)
@@ -11,7 +11,7 @@
 <pre><code class="clojure">(let [http (get-dep :http)
       logger (get-dep :logger)]
   ...)
-</code></pre><p>Dependencies should be registered with <a href="clj-di.core.html#var-register.21">register!</a>.</p></div></div></div><div class="public anchor" id="var-register.21"><h3>register!</h3><div class="usage"><code>(register! &amp; key-dep-pairs)</code></div><div class="doc"><div class="markdown"><p>Register dependecies.</p><p>Usage:</p>
+</code></pre><p>Dependencies should be registered with <a href="clj-di.core.html#var-register.21">register!</a> or <a href="clj-di.core.html#var-with-registered">with-registered</a>.</p></div></div></div><div class="public anchor" id="var-register.21"><h3>register!</h3><div class="usage"><code>(register! &amp; key-dep-pairs)</code></div><div class="doc"><div class="markdown"><p>Register dependecies.</p><p>Usage:</p>
 <pre><code class="clojure">(register! :logger logger
            :http http-client)
 </code></pre><p>After that you can get dependency with <a href="clj-di.core.html#var-get-dep">get-dep</a> or <a href="clj-di.core.html#var-let-deps">let-deps</a> using dependency name (here - <code>:logger</code> and <code>:http</code>).</p></div></div></div><div class="public anchor" id="var-with-registered"><h3>with-registered</h3><h4 class="type">macro</h4><div class="usage"><code>(with-registered key-dep-pairs &amp; body)</code></div><div class="doc"><div class="markdown"><p>Register dependencies, run code block and forget about dependencies.</p><p>Usage:</p>
