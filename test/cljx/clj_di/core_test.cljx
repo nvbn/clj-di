@@ -18,6 +18,11 @@
   (di/register! :http http)
   (is (= @di/dependencies {:http http})))
 
+(deftest test-forget!
+  (di/register! :http http)
+  (di/forget! :http)
+  (is (= @di/dependencies {})))
+
 (deftest test-get-dep
   (di/register! :http http)
   (is (= http (di/get-dep :http))))

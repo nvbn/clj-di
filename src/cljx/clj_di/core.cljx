@@ -7,14 +7,23 @@
   "Register dependecy, usage:
 
   ```clojure
-  (register :logger logger
-            :http http-client)
+  (register! :logger logger
+             :http http-client)
   ```
 
   After that you can get dependency with [[get-dep]] or [[let-deps]]
   using dependency name (here - `:logger` and `:http`)."
   [& key-dep-pairs]
   (apply swap! dependencies assoc key-dep-pairs))
+
+(defn forget!
+  "Forget about registered dependencies, usage:
+
+  ```clojure
+  (forget! :logger :http)
+  ```"
+  [& keys]
+  (apply swap! dependencies dissoc keys))
 
 (defn get-dep
   "Get dependency by name, usage:

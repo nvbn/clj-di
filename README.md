@@ -12,11 +12,17 @@ Add the following to your `project.clj`:
 
 ## Usage
 
-`clj-di.core/register` &ndash;  register dependency:
+`clj-di.core/register!` &ndash;  register dependencies:
 
 ```clojure
 (register! :dependency-name dependency
            :other-dependency-name other-dependency)
+```
+
+`clj-di.core/forget!` &ndash; forget about dependencies:
+
+```clojure
+(forget! :dependency-name dependency)
 ```
 
 `clj-di.core/get-dep` &ndash; get dependency:
