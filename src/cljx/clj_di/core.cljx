@@ -4,7 +4,9 @@
 (def ^:no-doc dependencies (atom {}))
 
 (defn register!
-  "Register dependecy, usage:
+  "Register dependecies.
+
+  Usage:
 
   ```clojure
   (register! :logger logger
@@ -17,7 +19,9 @@
   (apply swap! dependencies assoc key-dep-pairs))
 
 (defn forget!
-  "Forget about registered dependencies, usage:
+  "Forget about registered dependencies.
+
+  Usage:
 
   ```clojure
   (forget! :logger :http)
@@ -25,8 +29,25 @@
   [& keys]
   (apply swap! dependencies dissoc keys))
 
+(defmacro with-registered
+  "Register dependencies, run code block and forget about dependencies.
+
+  Usage:
+
+  ```clojure
+  (with-registered [:http http-client
+                    :logger logger]
+    ...)
+  ```"
+  [key-dep-pairs & body]
+  `(do (apply clj-di.core/register! ~key-dep-pairs)
+       (try (do ~@body)
+            (finally (apply clj-di.core/forget! (take-nth 2 ~key-dep-pairs))))))
+
 (defn get-dep
-  "Get dependency by name, usage:
+  "Get dependency by name.
+
+  Usage:
 
   ```clojure
   (get-dep :http)
@@ -37,7 +58,9 @@
   (key @dependencies))
 
 (defmacro let-deps
-  "Get dependencies with `let`-like syntax:
+  "Bind dependencies in lexical scope of code block.
+
+  Usage:
 
   ```clojure
   (let-deps [http :http
