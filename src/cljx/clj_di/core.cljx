@@ -53,7 +53,7 @@
   (get-dep :http)
   ```
 
-  Dependency should be registered with [[register!]]."
+  Dependency should be registered with [[register!]] or [[with-registered]]."
   [key]
   (key @dependencies))
 
@@ -76,7 +76,7 @@
     ...)
   ```
 
-  Dependencies should be registered with [[register!]]."
+  Dependencies should be registered with [[register!]] or [[with-registered]]."
   [deps & body]
   (let [names (vec (take-nth 2 deps))
         keys (vec (take-nth 2 (rest deps)))]
