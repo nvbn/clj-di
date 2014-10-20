@@ -9,16 +9,24 @@ Dependency injection for clojure and clojurescript.
 Add the following to your `project.clj`:
 
 ```clojure
-[clj-di "0.1.3"]
+[clj-di "0.2.0"]
 ```
 
 ## Usage
 
-Example with clojure:
+Example usage:
 
 ```clojure
 (ns clj-di.example
-  (:require [clj-di.core :refer [register! get-dep let-deps with-registered]))
+  (:require [clj-di.core :refer [register! get-dep let-deps with-registered def-dep]))
+  
+(def-dep printer  ; define dependency with def-dep
+  (print-log [this log]))
+  
+(deftype PrinterImpl  ; implement complex dependency
+  []
+  printer
+  (print-log [this log] (println @log))
 
 (defn log-write
   [msg]
@@ -30,33 +38,16 @@ Example with clojure:
   (log-write "test")
   (let-deps [printer :printer  ; get dependency with `let-deps`
              log :log]
-    (printer @log)))  
+    (print-log* log)))  ; call proxy-method, equals to `(.print-log (get-dep :printer) log)`  
   
-(with-registered [:printer println]  ;register dependency with `with-registered`
+(with-registered [:printer (PrinterImpl.)]  ;register dependency with `with-registered`
   (run))
-
 ```
 
-Example with clojurescript:
+With clojurescript you should change imports to:
 
 ```clojure
 (ns clj-di.example
-  (:require-macros [clj-di.core :refer [let-deps with-registered]])
+  (:require-macros [clj-di.core :refer [let-deps with-registered def-dep]])
   (:require [clj-di.core :refer [register! get-dep]))
-
-(defn log-write
-  [msg]
-  (swap! (get-dep :log) conj msg)) ; get dependency with `get-dep`
-    
-(defn run
-  []
-  (register! :log (atom []))  ; register dependency
-  (log-write "test")
-  (let-deps [printer :printer  ; get dependency with `let-deps`
-             log :log]
-    (printer @log)))  
-  
-(with-registered [:printer println]  ;register dependency with `with-registered`
-  (run))
-
 ```
