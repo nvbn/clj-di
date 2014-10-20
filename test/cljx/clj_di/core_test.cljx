@@ -47,3 +47,21 @@
   (testing "Registered dependency should be bound to lexical scope"
     (di/let-deps [http-dep :http]
       (is (= http http-dep)))))
+
+(di/def-dep logger
+  (info [_ msg])
+  (warn [_ msg]))
+
+(deftype LoggerImpl
+  []
+  logger
+  (info [_ msg] (str "INFO: " msg)))
+
+(deftest test-def-dep
+  (testing "Registering dependency"
+    (let [dep (LoggerImpl.)]
+      (di/with-registered [:logger dep]
+        (is (= dep (di/get-dep :logger))))))
+  (testing "Calling proxy function"
+    (di/with-registered [:logger (LoggerImpl.)]
+      (is (= (info* "test message") "INFO: test message")))))

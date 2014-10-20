@@ -84,3 +84,54 @@
         keys (vec (take-nth 2 (rest deps)))]
     `(let [~names (map clj-di.core/get-dep ~keys)]
        ~@body)))
+
+(defmacro ^:no-doc call-protocol
+  "Leverages differences in work with protocols with clojure and clojurescript."
+  [fn-name name args]
+  (if (boolean (:ns &env))
+    `(~fn-name (clj-di.core/get-dep ~(keyword name)) ~@args)
+    `(. (clj-di.core/get-dep ~(keyword name)) ~fn-name ~@args)))
+
+(defmacro def-dep
+  "Macro for defining complex dependecy with protocol and proxy functions.
+
+  For defining dependency you should:
+
+  ```clojure
+  (def-dep http-client
+    (get [_ url request])
+    (post [_ url request]))
+  ```
+
+  After that you have `http-client` protocol and `get*` and `post*` proxy functions.
+
+  Then you need to implement protocol:
+
+  ```clojure
+  (deftype HttpClient
+    []
+    http-client
+    (get [_ url request] (http/get url request))
+    (post [_ url request] (http/post url request)))
+  ```
+
+  And register dependency:
+
+  ```clojure
+  (register! :http-client (HttpClient.))
+  ```
+
+  And after that you can use proxy functions, like:
+
+  ```clojure
+  (get* \"http://nvbn.github.io/\" {})
+  (post* \"http://nvbn.github.io/\" {:transit-params {:a 1 :b 2}})
+  ```"
+  [name & body]
+  (apply vector `(defprotocol ~name ~@body)
+         (for [method body
+               :let [fn-name (first method)
+                     args (-> method second rest vec)]]
+           `(defn ~(symbol (str fn-name "*"))
+              ~args
+              (clj-di.core/call-protocol ~fn-name ~name ~args)))))
