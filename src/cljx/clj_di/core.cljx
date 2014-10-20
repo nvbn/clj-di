@@ -16,7 +16,8 @@
   After that you can get dependency with [[get-dep]] or [[let-deps]]
   using dependency name (here - `:logger` and `:http`)."
   [& key-dep-pairs]
-  (apply swap! dependencies assoc key-dep-pairs))
+  (doseq [[key dep] (partition-all 2 key-dep-pairs)]
+    (swap! dependencies update-in [key] #(conj % dep))))
 
 (defn forget!
   "Forget about registered dependencies.
@@ -27,7 +28,8 @@
   (forget! :logger :http)
   ```"
   [& keys]
-  (apply swap! dependencies dissoc keys))
+  (doseq [key keys]
+    (swap! dependencies update-in [key] rest)))
 
 (defmacro with-registered
   "Register dependencies, run code block and forget about dependencies.
@@ -55,7 +57,7 @@
 
   Dependency should be registered with [[register!]] or [[with-registered]]."
   [key]
-  (key @dependencies))
+  (-> @dependencies key first))
 
 (defmacro let-deps
   "Bind dependencies in lexical scope of code block.
