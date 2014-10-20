@@ -8,7 +8,9 @@ Dependency injection for clojure and clojurescript.
 
 Add the following to your `project.clj`:
 
-[![Clojars Project](https://clojars.org/clj-di/latest-version.svg)](http://clojars.org/clj-di)
+```clojure
+[clj-di "0.1.3"]
+```
 
 ## Usage
 
@@ -20,7 +22,7 @@ Example with clojure:
 
 (defn log-write
   [msg]
-  (swap! (get-dep :log) conj)) ; get dependency with `get-dep`
+  (swap! (get-dep :log) conj msg)) ; get dependency with `get-dep`
     
 (defn run
   []
@@ -44,7 +46,7 @@ Example with clojurescript:
 
 (defn log-write
   [msg]
-  (swap! (get-dep :log) conj)) ; get dependency with `get-dep`
+  (swap! (get-dep :log) conj msg)) ; get dependency with `get-dep`
     
 (defn run
   []
