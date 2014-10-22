@@ -92,13 +92,14 @@
     `(~fn-name (clj-di.core/get-dep ~(keyword name)) ~@args)
     `(. (clj-di.core/get-dep ~(keyword name)) ~fn-name ~@args)))
 
-(defmacro def-dep
-  "Macro for defining complex dependecy with protocol and proxy functions.
+(defmacro defprotocol*
+  "Defines protocol and creates proxy methods where protocol implementation
+  received as a dependency.
 
   For defining dependency you should:
 
   ```clojure
-  (def-dep http-client
+  (defprotocol* http-client
     (get [_ url request])
     (post [_ url request]))
   ```

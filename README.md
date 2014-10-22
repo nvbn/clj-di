@@ -18,9 +18,9 @@ Example usage:
 
 ```clojure
 (ns clj-di.example
-  (:require [clj-di.core :refer [register! get-dep let-deps with-registered def-dep]))
+  (:require [clj-di.core :refer [register! get-dep let-deps with-registered defprotocol*]))
   
-(def-dep printer  ; define dependency with def-dep
+(defprotocol* printer  ; define dependency with defprotocol*
   (print-log [this log]))
   
 (deftype PrinterImpl  ; implement complex dependency
@@ -48,6 +48,6 @@ With clojurescript you should change imports to:
 
 ```clojure
 (ns clj-di.example
-  (:require-macros [clj-di.core :refer [let-deps with-registered def-dep]])
+  (:require-macros [clj-di.core :refer [let-deps with-registered defprotocol*]])
   (:require [clj-di.core :refer [register! get-dep]))
 ```

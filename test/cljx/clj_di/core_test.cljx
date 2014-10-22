@@ -48,7 +48,7 @@
     (di/let-deps [http-dep :http]
       (is (= http http-dep)))))
 
-(di/def-dep logger
+(di/defprotocol* logger
   (info [_ msg])
   (warn [_ msg]))
 
@@ -57,7 +57,7 @@
   logger
   (info [_ msg] (str "INFO: " msg)))
 
-(deftest test-def-dep
+(deftest test-defprotocol*
   (testing "Registering dependency"
     (let [dep (LoggerImpl.)]
       (di/with-registered [:logger dep]
