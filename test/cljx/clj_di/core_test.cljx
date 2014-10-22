@@ -49,13 +49,25 @@
       (is (= http http-dep)))))
 
 (di/defprotocol* logger
-  (info [_ msg])
+  (info [_ msg] [_ msg msg2])
   (warn [_ msg]))
+
+(di/defprotocol* logger2
+  "Docstring"
+  (info2 [_ msg] [_ msg msg2])
+  (warn2 [_ msg]))
 
 (deftype LoggerImpl
   []
   logger
-  (info [_ msg] (str "INFO: " msg)))
+  (info [_ msg] (str "INFO: " msg))
+  (info [_ msg msg2] (str "INFO: " msg " " msg2)))
+
+(defrecord LoggerImpl2
+  []
+  logger2
+  (info2 [_ msg] (str "INFO2: " msg))
+  (info2 [_ msg msg2] (str "INFO2: " msg " " msg2)))
 
 (deftest test-defprotocol*
   (testing "Registering dependency"
@@ -63,5 +75,9 @@
       (di/with-registered [:logger dep]
         (is (= dep (di/get-dep :logger))))))
   (testing "Calling proxy function"
-    (di/with-registered [:logger (LoggerImpl.)]
-      (is (= (info* "test message") "INFO: test message")))))
+    (di/with-registered [:logger (LoggerImpl.)
+                         :logger2 (LoggerImpl2.)]
+      (is (= (info* "test message") "INFO: test message"))
+      (is (= (info* "test message" "!!!") "INFO: test message !!!"))
+      (is (= (info2* "test message") "INFO2: test message"))
+      (is (= (info2* "test message" "!!!") "INFO2: test message !!!")))))

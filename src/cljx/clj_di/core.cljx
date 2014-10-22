@@ -92,6 +92,25 @@
     `(~fn-name (clj-di.core/get-dep ~(keyword name)) ~@args)
     `(. (clj-di.core/get-dep ~(keyword name)) ~fn-name ~@args)))
 
+(defn- ^:no-doc get-name-arities-pairs
+  "Returns name-arities pairs from list of method definitions of protocol."
+  [methods]
+  (for [[method-name & arities] methods]
+    [method-name (map rest arities)]))
+
+(defn- ^:no-doc without-docstring
+  "Returns body of `defprotocol` without docstring."
+  [body]
+  (if (string? (first body))
+    (rest body)
+    body))
+
+(defn- ^:no-doc get-fn-bodies
+  "Returns fn bodies for name and arities."
+  [name fn-name arities]
+  (for [arity arities]
+    `(~(vec arity) (clj-di.core/call-protocol ~fn-name ~name ~arity))))
+
 (defmacro defprotocol*
   "Defines protocol and creates proxy methods where protocol implementation
   received as a dependency.
@@ -130,9 +149,7 @@
   ```"
   [name & body]
   (apply vector `(defprotocol ~name ~@body)
-         (for [method body
-               :let [fn-name (first method)
-                     args (-> method second rest vec)]]
+         (for [[fn-name arities] (get-name-arities-pairs (without-docstring body))
+               :let [fn-bodies (get-fn-bodies name fn-name arities)]]
            `(defn ~(symbol (str fn-name "*"))
-              ~args
-              (clj-di.core/call-protocol ~fn-name ~name ~args)))))
+              ~@fn-bodies))))
