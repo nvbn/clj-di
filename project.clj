@@ -30,6 +30,9 @@
                                          :test-commands {"test" ["phantomjs" :runner
                                                                  "target/cljs-test.js"]}}
                              :jvm-opts ["-Xss16m"]}}
-            :codox {:defaults {:doc/format :markdown}}
+            :codox {:defaults {:doc/format :markdown}
+                    :src-dir-uri "https://github.com/nvbn/clj-di/tree/master/"
+                    :src-linenum-anchor-prefix "L"
+                    :src-uri-mapping {#"target/generated-clj" #(str "src/cljx/" % "x")}}
             :test-paths ["target/generated-clj-test"]
             :source-paths ["target/generated-clj" "target/generated-cljs" "src/cljs"])
