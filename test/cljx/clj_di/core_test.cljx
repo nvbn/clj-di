@@ -1,8 +1,11 @@
 (ns clj-di.core-test
+  #+cljs (:require-macros [cljs.core.async.macros :refer [go]])
   (:require #+clj [clojure.test :refer [deftest is use-fixtures testing]]
-            #+cljs [cemerick.cljs.test :refer-macros [deftest is use-fixtures testing]]
+            #+cljs [cemerick.cljs.test :refer-macros [deftest is use-fixtures testing done]]
+            #+cljs [cljs.core.async :refer [<! timeout]]
             [clj-di.core :as di #+cljs :include-macros #+cljs true]
-            [clj-di.test :as dt #+cljs :include-macros #+cljs true]))
+            [clj-di.test :as dt #+cljs :include-macros #+cljs true]
+            [clj-di.test-ns :as t]))
 
 (use-fixtures :each (fn [f] (dt/with-fresh-dependencies (f))))
 
@@ -35,7 +38,7 @@
     (try (di/with-registered [:http http]
            (throw #+clj (Exception.) #+cljs (js/Error.)))
          (catch #+clj Exception #+cljs js/Error e
-                                (is (= @di/dependencies {:http []}))))))
+                                                (is (= @di/dependencies {:http []}))))))
 
 (deftest test-get-dep
   (di/register! :http http)
@@ -46,7 +49,7 @@
   (di/register! :http http)
   (testing "Registered dependency should be bound to lexical scope"
     (di/let-deps [http-dep :http]
-      (is (= http http-dep)))))
+                 (is (= http http-dep)))))
 
 (di/defprotocol* logger
   (info [_ msg] [_ msg msg2])
@@ -81,3 +84,48 @@
       (is (= (info* "test message" "!!!") "INFO: test message !!!"))
       (is (= (info2* "test message") "INFO2: test message"))
       (is (= (info2* "test message" "!!!") "INFO2: test message !!!")))))
+
+#+cljs (deftest test-with-reset
+         (testing "should not be mocked before"
+           (is (= (t/test-fn) :initial))
+           (is (= (t/test-fn-2) :initial)))
+         (testing "should be mocked inside"
+           (di/with-reset [t/test-fn (constantly :mocked)]
+             (is (= (t/test-fn) :mocked))
+             (is (= (t/test-fn-2) :mocked))))
+         (testing "should not be mocked after"
+           (is (= (t/test-fn) :initial))
+           (is (= (t/test-fn-2) :initial)))
+         (testing "should propagate exceptions"
+           (let [exc (js/Error. "Exception")]
+             (try (di/with-reset [t/test-fn (constantly :mocked)]
+                    (throw exc))
+                  (catch js/Error e (is (= e exc))))))
+         (testing "should not be mocked after fail"
+           (is (= (t/test-fn) :initial))
+           (is (= (t/test-fn-2) :initial))))
+
+#+cljs (deftest ^:async test-with-reset-in-go-block
+         (go (testing "should not be mocked before"
+               (is (= (t/test-fn) :initial))
+               (is (= (t/test-fn-2) :initial)))
+             (<! (timeout 0))
+             (testing "should be mocked inside"
+               (di/with-reset [t/test-fn (constantly :mocked)]
+                 (is (= (t/test-fn) :mocked))
+                 (is (= (t/test-fn-2) :mocked))))
+             (<! (timeout 0))
+             (testing "should not be mocked after"
+               (is (= (t/test-fn) :initial))
+               (is (= (t/test-fn-2) :initial)))
+             (<! (timeout 0))
+             (testing "should propagate exceptions"
+               (let [exc (js/Error. "Exception")]
+                 (try (di/with-reset [t/test-fn (constantly :mocked)]
+                        (throw exc))
+                      (catch js/Error e (is (= e exc))))))
+             (<! (timeout 0))
+             (testing "should not be mocked after fail"
+               (is (= (t/test-fn) :initial))
+               (is (= (t/test-fn-2) :initial)))
+             (done)))

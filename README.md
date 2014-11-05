@@ -9,7 +9,7 @@ Dependency injection for clojure and clojurescript.
 Add the following to your `project.clj`:
 
 ```clojure
-[clj-di "0.3.0"]
+[clj-di "0.4.0"]
 ```
 
 ## Usage

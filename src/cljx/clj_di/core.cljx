@@ -153,3 +153,31 @@
                :let [fn-bodies (get-fn-bodies name fn-name arities)]]
            `(defn ~(symbol (str fn-name "*"))
               ~@fn-bodies))))
+
+(defn ^:no-doc with-reset!-once
+  "Utility function for temporary redefining single var."
+  [[a-var a-val] body]
+  `(let [prev-val# [~a-var]]
+     (set! ~a-var ~a-val)
+     (try (do ~@body)
+          (catch js/Error e# (throw e#))
+          (finally (set! ~a-var (first prev-val#))))))
+
+(defmacro with-reset
+  "**CLJS only**
+
+  Temporarily redefines vars while executing the body.
+  Works like `with-redefs` but can work inside go-block.
+
+  Usage:
+
+  ```clojure
+  (with-reset [http/get (fn [url] {:body url})]
+    ...)
+  ```
+  "
+  [bindings & body]
+  (let [wrapper-fn (->> (partition-all 2 bindings)
+                        (map #(partial with-reset!-once %))
+                        (apply comp))]
+    (wrapper-fn body)))
