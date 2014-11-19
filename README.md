@@ -84,7 +84,7 @@ But it's ugly. Or you can create http protocol and http type and use it as a dep
 (deftype http-impl
   (GET [_ url] (http/get url))
   (POST [_ url data] (http/post url data))
-  (PUT [_ url data] (http/put url data))
+  (PUT [_ url data] (http/put url data)))
 
 (defn make-http [] (http-impl.))
 
@@ -107,7 +107,7 @@ So for simplifying this process you can use `defprotocol*` macro:
 (deftype http-impl
   (GET [_ url] (http/get url))
   (POST [_ url data] (http/post url data))
-  (PUT [_ url data] (http/put url data))
+  (PUT [_ url data] (http/put url data)))
 
 (defn make-http [] (http-impl.))
 
