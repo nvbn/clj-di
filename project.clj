@@ -7,7 +7,7 @@
                            [org.clojure/clojurescript "0.0-2371"]]
             :profiles {:uberjar {:hooks [cljx.hooks]}
                        :dev {:dependencies [[com.cemerick/clojurescript.test "0.3.1"]
-                                            [org.clojure/core.async "0.1.346.0-17112a-alpha"]]
+                                            [org.clojure/core.async "0.1.346.0-17112a-alpha" ]]
                              :plugins [[lein-cljsbuild "1.0.3"]
                                        [com.keminglabs/cljx "0.4.0"]
                                        [com.cemerick/clojurescript.test "0.3.1"]

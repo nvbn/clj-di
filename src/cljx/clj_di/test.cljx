@@ -22,3 +22,35 @@
      (reset! clj-di.core/dependencies {})
      ~@body
      (reset! clj-di.core/dependencies old#)))
+
+(defmacro with-reset
+  "**CLJS only**
+
+  binding => var-symbol temp-value-expr
+
+  Temporarily redefines vars while executing the body.  The
+  temp-value-exprs will be evaluated and each resulting value will
+  replace in parallel the root value of its var.  After the body is
+  executed, the root values of all the vars will be set back to their
+  old values. Useful for mocking out functions during testing.
+
+  Usage:
+
+  ```clojure
+  (with-reset [http/get (fn [url] :test)]
+    (is (= (http/get :url) :test)))
+  ```"
+  [bindings & body]
+  (let [names (take-nth 2 bindings)
+        vals (take-nth 2 (drop 1 bindings))
+        current-vals (map #(list 'identity %) names)
+        tempnames (map (comp gensym name) names)
+        binds (map vector names vals)
+        resets (reverse (map vector names tempnames))
+        bind-value (fn [[k v]] (list 'set! k v))]
+    `(let [~@(interleave tempnames current-vals)]
+       (try
+         ~@(map bind-value binds)
+         ~@body
+         (finally
+           ~@(map bind-value resets))))))

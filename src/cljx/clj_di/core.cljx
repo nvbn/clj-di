@@ -162,22 +162,3 @@
      (try (do ~@body)
           (catch js/Error e# (throw e#))
           (finally (set! ~a-var (first prev-val#))))))
-
-(defmacro with-reset
-  "**CLJS only**
-
-  Temporarily redefines vars while executing the body.
-  Works like `with-redefs` but can work inside go-block.
-
-  Usage:
-
-  ```clojure
-  (with-reset [http/get (fn [url] {:body url})]
-    ...)
-  ```
-  "
-  [bindings & body]
-  (let [wrapper-fn (->> (partition-all 2 bindings)
-                        (map #(partial with-reset!-once %))
-                        (apply comp))]
-    (wrapper-fn body)))
