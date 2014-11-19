@@ -66,6 +66,7 @@ first way &ndash; register `http-get`, `http-post`, `http-put` dependencies:
 (register! :http-get http/get
            :http-post http/post
            :http-put http/put)
+
 (let-deps [http-get :http-get
            http-post :http-post]
   (http-get "some-url")
