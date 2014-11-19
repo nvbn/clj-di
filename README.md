@@ -182,3 +182,8 @@ For running tests:
 lein test
 lein cljsbuild test
 ```
+
+## Changelog
+
+- **0.5** &mdash; move `with-reset` and `with-registered` to `clj-di.test` namespace;
+- **0.4** &mdash; add `with-reset` as a working alternative of clojure `with-redefs` for ClojureScript inside `go` block.
