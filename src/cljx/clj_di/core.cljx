@@ -19,32 +19,11 @@
   (doseq [[key dep] (partition-all 2 key-dep-pairs)]
     (swap! dependencies update-in [key] #(conj % dep))))
 
-(defn forget!
-  "Forget about registered dependencies.
-
-  Usage:
-
-  ```clojure
-  (forget! :logger :http)
-  ```"
+(defn ^:no-doc forget!
+  "Forget about registered dependencies."
   [& keys]
   (doseq [key keys]
     (swap! dependencies update-in [key] rest)))
-
-(defmacro with-registered
-  "Register dependencies, run code block and forget about dependencies.
-
-  Usage:
-
-  ```clojure
-  (with-registered [:http http-client
-                    :logger logger]
-    ...)
-  ```"
-  [key-dep-pairs & body]
-  `(do (apply clj-di.core/register! ~key-dep-pairs)
-       (try (do ~@body)
-            (finally (apply clj-di.core/forget! (take-nth 2 ~key-dep-pairs))))))
 
 (defn get-dep
   "Get dependency by name.
@@ -153,12 +132,3 @@
                :let [fn-bodies (get-fn-bodies name fn-name arities)]]
            `(defn ~(symbol (str fn-name "*"))
               ~@fn-bodies))))
-
-(defn ^:no-doc with-reset!-once
-  "Utility function for temporary redefining single var."
-  [[a-var a-val] body]
-  `(let [prev-val# [~a-var]]
-     (set! ~a-var ~a-val)
-     (try (do ~@body)
-          (catch js/Error e# (throw e#))
-          (finally (set! ~a-var (first prev-val#))))))

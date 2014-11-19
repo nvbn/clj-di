@@ -54,3 +54,18 @@
          ~@body
          (finally
            ~@(map bind-value resets))))))
+
+(defmacro with-registered
+  "Register dependencies, run code block and forget about dependencies.
+
+  Usage:
+
+  ```clojure
+  (with-registered [:http http-client
+                    :logger logger]
+    ...)
+  ```"
+  [key-dep-pairs & body]
+  `(do (apply clj-di.core/register! ~key-dep-pairs)
+       (try (do ~@body)
+            (finally (apply clj-di.core/forget! (take-nth 2 ~key-dep-pairs))))))
