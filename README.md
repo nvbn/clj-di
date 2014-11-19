@@ -153,7 +153,7 @@ For registering dependencies in tests you can use `with-registered` macro:
 (deftest test-write-to-cache
   (with-registered [:cache (atom {})]
     (write-to-cache :test "test")
-    (is (= @(get-dep :cache) {:test "test}))))
+    (is (= @(get-dep :cache) {:test "test"}))))
 ```
 
 For redefining variables you can use clojure `with-redefs`,
